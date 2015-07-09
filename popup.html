@@ -1,0 +1,106 @@
+
+<!doctype html>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Example | OpenPGP.js</title>
+ </head>
+ <body>
+  <div id="title">
+  </div>
+  <div class="block">
+  		<input type='button' id='fetch_text_btn' value='fetch text'/>  fb uid:<span id='fb_uid'></span>
+     <li><label>Your message: </label><br/><textarea name="message" id="message" rows=10 cols=40>test message</textarea></li>
+    </ul>
+    <!-- as <input type='text' id='encrypt_as' value='josh@3io.com'/> -->
+     <!-- input type='text' id='encrypt_to' value='una bageler'/ -->
+     Sending to: <span id='encrypt_to'><i>recipients go here once you fetch text.</i></span>
+     <input type='hidden' id='encrypt_to_ids'/>
+     <br/><input type='button' id='load_enc_pub_key_btn' value='load key(s) (do this first)'/>
+     <input type="button" name="mybutton" id="mybutton" value="encrypt and send" disabled="disabled"/>
+     <br/>
+     <span style='color:red' id='encrypt_error'></span>
+     <br/>
+     Enter passphrase to decrypt: <input type='password' id='passphrase' value=''/>
+     <input type='button' id='decrypt_btn' value='decrypt'/>
+     <input type='hidden' id='key_count' value='0'/>
+     <input type='hidden' id='key_timer' value='0'/>
+     <input type='hidden' id='key_timer_iter' value='0'/>
+     
+   <textarea id="decrypted" row=10 cols=40></textarea>
+  </div>
+  <div class="block" style='display:none'>debug
+  	<div id='debug' style='max-height:300px'></div>
+  </div>
+  <div class="block">
+  	
+  	<input type='button' id='newkeys_btn' value='new keys'/>
+  	<!-- input type='button' id='showkeys_btn' value='show keyring'/ -->
+  	<input type='button' id='showmykeys_btn' value='show my keypair'/>
+  	<input type='button' id='clearkeys_btn' value='clear keys'/>
+  	<!-- input type='button' id='clear_debug_btn' value='clear debug'/ -->
+  	<!-- input type='button' id='load_pubkey_btn' value='load public key for user below'/ -->
+  </div>
+  <div class="block">
+   	<!-- UserID for new keys or load pubkey above:<input type='text' id='newuserid_txt' value='Josh Goldberg <josh@3io.com>'/><br/> -->
+
+	<div id='newkeys_error' style='font-color:red;font-weight: bold;'></div>
+
+  	Enter a passphrase for your new keys:<br/>
+  	passphrase: <input type='password' id='pass1' value='a'/><br/>
+  	confirm: <input type='password' id='pass2' value='a'/><br/>
+  	<table><tr><td>privkey</td><td>pubkey</td></tr>
+  	<tr><td><textarea id='privkey' cols=20 rows=2></textarea></td>
+  	<td><textarea id="pubkey" cols=20 rows=2></textarea></td></tr></table>
+  	<input type='button' id='add_keypair' value='add keypair'/>
+  </div>
+  	
+  <div class="block">
+   <textarea style='display:none;' id="origpubkey" cols=40 rows=5>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG/MacGPG2 v2.0.18 (Darwin)
+Comment: GPGTools - http://gpgtools.org
+
+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
+=Lx12
+-----END PGP PUBLIC KEY BLOCK-----
+   </textarea>
+  </div>
+  <script src="./jquery.dev.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./openpgp.dev.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./util.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./tabs.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./example.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./popup.js" type="text/javascript" charset="utf-8"></script>
+ </body>
+</html>
